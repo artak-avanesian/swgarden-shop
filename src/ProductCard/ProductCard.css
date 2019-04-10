@@ -10,8 +10,8 @@
     color: rgb(13, 104, 165);
     text-decoration: none;
 }
-.card:not(:nth-child(4n)) {
-    margin-right: 38.6px;
+.card:not(:nth-child(3n)) {
+    margin-right: 52px;
 }
 .card {
     margin-bottom: 15px;

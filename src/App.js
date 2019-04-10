@@ -1,13 +1,18 @@
 import React, { Component } from 'react';
-import './App.css'
-import { Container, Row, Col, InputGroup, FormControl, Card } from 'react-bootstrap'
+import { Container, Row, Col, InputGroup, FormControl, Button } from 'react-bootstrap'
+import { Route, Link } from 'react-router-dom'
+import Menu from './Menu/Menu';
+import { uniq } from 'lodash'
+import DisplayedProducts from './DisplayedProducts/DisplayedProducts';
+import SearchProducts from './SearchProducts/SearchProducts';
 
 class App extends Component {
 
     state = {
         value: '',
         search: '',
-        products: []
+        products: [],
+        displayedProducts: [],
     }
 
     componentDidMount() {
@@ -17,6 +22,9 @@ class App extends Component {
                 this.setState({
                     products: response.products
                 })
+                this.setState(prevState => ({
+                    categories: prevState.products.map(item => item.bsr_category)
+                }))
             })
     }
 
@@ -28,22 +36,38 @@ class App extends Component {
 
     handlerKeyPress = event => {
         if (event.key === 'Enter' && this.state.value) {
-            this.setState(prevState => ({
-                search: prevState.value
-            }))
-            this.setState({
-                value: ''
-            })
+            this.onSearch(this.state.value)
+            window.location.href = '#search'
         }
     }
 
-    search() {
-        return this.state.products.filter((item) => {
-            return item.name.toLowerCase().indexOf(this.state.search.toLowerCase()) > -1
+    onSearch = search => {
+        this.setState({
+            search
         })
     }
 
+    getFilteredProducts = () => {
+
+        const {search} = this.state
+
+        if (!search) return []
+
+        return this.state.products.filter((item) => {
+            return item.name.toLowerCase().includes(search.toLowerCase())
+        })
+    }
+
+    changeCategory = (category) => {
+        this.setState(prevState => ({
+            displayedProducts: prevState.products.filter((item) => item.bsr_category === category)
+        }))
+    } 
+
     render() {
+
+        const filteredProducts = this.getFilteredProducts()
+
         return (
             <Container>
                 <Row>
@@ -57,29 +81,43 @@ class App extends Component {
                                 onChange={this.valueChangeHandler}
                                 onKeyPress={this.handlerKeyPress}
                             />
+                            <InputGroup.Append>
+                                <Link to='/search'>
+                                    <Button 
+                                        variant="secondary"
+                                        onClick={() => this.onSearch(this.state.value)}
+                                        disabled={!this.state.value}
+                                    >
+                                        Search
+                                    </Button>
+                                </Link>
+                            </InputGroup.Append>
                         </InputGroup>
                     </Col>
                 </Row>
                 <Row>
-                    {
-                        this.search().length === 0 && this.state.search ? 
-                        <p>Products with the same name is missing. Please, try again.</p> 
-                        : this.search().map((item) => (
-                            <Card key={item.asin} style={{width: '16rem'}}>
-                                <Card.Body>
-                                    <Card.Title>
-                                        <a href={item.link} className='name' title={item.name}>{item.name} </a>
-                                    </Card.Title>
-                                </Card.Body>
-                                <Card.Img variant="top" src={item.img} alt={item.name} height='200'/>
-                                <Card.Body>
-                                    <Card.Text>
-                                        <span className='bold'>Price:</span> {item.price} &#163;
-                                    </Card.Text>
-                                </Card.Body>
-                            </Card>
-                        ))
-                    }
+                    <Col lg={2}>
+                        <Menu
+                            categories={uniq(this.state.categories)}
+                            changeCategory={this.changeCategory}
+                        />
+                    </Col>
+                    <Col lg={10}>
+                        <Route exact path='/' render={() => <DisplayedProducts
+                            displayedProducts={this.state.products}
+                        />}/>
+                        <Route path='/search' render={() => <SearchProducts
+                            filteredProducts={filteredProducts}
+                            searchStr={this.state.search}
+                        />}/>
+                        {
+                            uniq(this.state.categories).map((item, index) => (
+                                <Route key={index} path={`/${item}`} render={() => <DisplayedProducts
+                                    displayedProducts={this.state.displayedProducts}
+                                />}/>
+                            ))
+                        }
+                    </Col>
                 </Row>
             </Container>
         );
