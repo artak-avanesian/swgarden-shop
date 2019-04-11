@@ -3,7 +3,7 @@ import ProductCard from './../ProductCard/ProductCard';
 import './DisplayedProducts.css'
 
 const DisplayedProducts = ({
-    displayedProducts
+    displayedProducts,
 }) => (
     <section>
         {

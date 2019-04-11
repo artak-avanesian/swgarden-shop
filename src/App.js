@@ -26,6 +26,7 @@ class App extends Component {
                     categories: prevState.products.map(item => item.bsr_category)
                 }))
             })
+            
     }
 
     valueChangeHandler = event => {
@@ -37,7 +38,7 @@ class App extends Component {
     handlerKeyPress = event => {
         if (event.key === 'Enter' && this.state.value) {
             this.onSearch(this.state.value)
-            window.location.href = '#search'
+            //window.location.pathname = '/search'
         }
     }
 
