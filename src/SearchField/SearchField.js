@@ -7,6 +7,9 @@ const SearchField = ({
     handlerKeyPress
 }) => (
     <InputGroup className="mb-3 mt-4">
+        <InputGroup.Prepend>
+            <InputGroup.Text id="basic-addon1">Search</InputGroup.Text>
+        </InputGroup.Prepend>
         <FormControl
             aria-label="Default"
             aria-describedby="inputGroup-sizing-default"
