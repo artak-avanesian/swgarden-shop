@@ -6,7 +6,6 @@ import './Menu.css'
 const Menu = ({
     categories,
     changeCategory,
-    products
 }) => (
     <Nav defaultActiveKey="/" className="flex-column">
         <Link 

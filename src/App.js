@@ -5,28 +5,18 @@ import Menu from './Menu/Menu';
 import { uniq } from 'lodash'
 import DisplayedProducts from './DisplayedProducts/DisplayedProducts';
 import SearchProducts from './SearchProducts/SearchProducts';
+import { connect } from 'react-redux';
 
 class App extends Component {
 
     state = {
         value: '',
         search: '',
-        products: [],
         displayedProducts: [],
     }
 
     componentDidMount() {
-        fetch('http://localhost:3000/products.json')
-            .then(response => response.json())
-            .then(response => {
-                this.setState({
-                    products: response.products
-                })
-                this.setState(prevState => ({
-                    categories: prevState.products.map(item => item.bsr_category)
-                }))
-            })
-            
+        this.props.fetchData()     
     }
 
     valueChangeHandler = event => {
@@ -54,20 +44,21 @@ class App extends Component {
 
         if (!search) return []
 
-        return this.state.products.filter((item) => {
+        return this.props.products.filter((item) => {
             return item.name.toLowerCase().includes(search.toLowerCase())
         })
     }
 
     changeCategory = (category) => {
-        this.setState(prevState => ({
-            displayedProducts: prevState.products.filter((item) => item.bsr_category === category)
-        }))
+        this.setState({
+            displayedProducts: this.props.products.filter(item => item.bsr_category === category)
+        })
     } 
 
     render() {
 
         const filteredProducts = this.getFilteredProducts()
+        const { products, categories } = this.props
 
         return (
             <Container>
@@ -99,20 +90,20 @@ class App extends Component {
                 <Row>
                     <Col lg={2}>
                         <Menu
-                            categories={uniq(this.state.categories)}
+                            categories={uniq(categories)}
                             changeCategory={this.changeCategory}
                         />
                     </Col>
                     <Col lg={10}>
                         <Route exact path='/' render={() => <DisplayedProducts
-                            displayedProducts={this.state.products}
+                            displayedProducts={products}
                         />}/>
                         <Route path='/search' render={() => <SearchProducts
                             filteredProducts={filteredProducts}
                             searchStr={this.state.search}
                         />}/>
                         {
-                            uniq(this.state.categories).map((item, index) => (
+                            uniq(categories).map((item, index) => (
                                 <Route key={index} path={`/${item}`} render={() => <DisplayedProducts
                                     displayedProducts={this.state.displayedProducts}
                                 />}/>
@@ -125,4 +116,18 @@ class App extends Component {
     }
 }
 
-export default App;
+const mapStateToProps = state => ({
+    products: state.products,
+    categories: state.categories
+})
+
+const mapDispatchToProps = dispatch => ({
+    fetchData: () => dispatch({
+        type: 'FETCH_DATA'
+    })
+})
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(App);
