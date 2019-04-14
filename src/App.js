@@ -17,17 +17,21 @@ class App extends Component {
     }
 
     componentDidMount() {
-        this.props.fetchData()     
+        this.props.fetchData()
     }
 
     valueChangeHandler = event => {
         this.setState({
             value: event.target.value
         })
+        const { history } = this.props
+        history.push({
+            search: this.state.value.length > 0 ? '' + new URLSearchParams({ value: event.target.value }) : null
+        })
     }
 
     handlerKeyPress = event => {
-        let {location} = this.props
+        const {location} = this.props
         if (event.key === 'Enter' && this.state.value) {
             this.setState(prevState => ({
                 search: prevState.value
