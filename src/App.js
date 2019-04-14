@@ -6,6 +6,7 @@ import { uniq } from 'lodash'
 import DisplayedProducts from './DisplayedProducts/DisplayedProducts';
 import SearchProducts from './SearchProducts/SearchProducts';
 import { connect } from 'react-redux';
+import SearchField from './SearchField/SearchField';
 
 class App extends Component {
 
@@ -64,27 +65,12 @@ class App extends Component {
             <Container>
                 <Row>
                     <Col>
-                        <InputGroup className="mb-3 mt-4">
-                            <FormControl
-                                aria-label="Default"
-                                aria-describedby="inputGroup-sizing-default"
-                                placeholder="Product name"
-                                value={this.state.value}
-                                onChange={this.valueChangeHandler}
-                                onKeyPress={this.handlerKeyPress}
-                            />
-                            <InputGroup.Append>
-                                <Link to='/search'>
-                                    <Button 
-                                        variant="secondary"
-                                        onClick={() => this.onSearch(this.state.value)}
-                                        disabled={!this.state.value}
-                                    >
-                                        Search
-                                    </Button>
-                                </Link>
-                            </InputGroup.Append>
-                        </InputGroup>
+                        <SearchField
+                            value={this.state.value}
+                            valueChangeHandler={this.valueChangeHandler}
+                            handlerKeyPress={this.handlerKeyPress}
+                            onSearch={this.onSearch}
+                        />
                     </Col>
                 </Row>
                 <Row>
