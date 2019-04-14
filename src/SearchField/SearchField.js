@@ -1,12 +1,10 @@
 import React from 'react'
-import { InputGroup, FormControl, Button } from 'react-bootstrap'
-import { Link } from 'react-router-dom'
+import { InputGroup, FormControl } from 'react-bootstrap'
 
 const SearchField = ({
     value,
     valueChangeHandler,
-    handlerKeyPress,
-    onSearch
+    handlerKeyPress
 }) => (
     <InputGroup className="mb-3 mt-4">
         <FormControl
@@ -17,17 +15,6 @@ const SearchField = ({
             onChange={valueChangeHandler}
             onKeyPress={handlerKeyPress}
         />
-        <InputGroup.Append>
-            <Link to='/search'>
-                <Button 
-                    variant="secondary"
-                    onClick={() => onSearch(value)}
-                    disabled={!value}
-                >
-                    Search
-                </Button>
-            </Link>
-        </InputGroup.Append>
     </InputGroup>
 )
 

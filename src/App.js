@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { Container, Row, Col, InputGroup, FormControl, Button } from 'react-bootstrap'
-import { Route, Link } from 'react-router-dom'
+import { Container, Row, Col} from 'react-bootstrap'
+import { Route, withRouter } from 'react-router-dom'
 import Menu from './Menu/Menu';
 import { uniq } from 'lodash'
 import DisplayedProducts from './DisplayedProducts/DisplayedProducts';
@@ -27,16 +27,13 @@ class App extends Component {
     }
 
     handlerKeyPress = event => {
+        let {location} = this.props
         if (event.key === 'Enter' && this.state.value) {
-            this.onSearch(this.state.value)
-            //window.location.pathname = '/search'
+            this.setState(prevState => ({
+                search: prevState.value
+            }))
+            location.pathname = '/search'
         }
-    }
-
-    onSearch = search => {
-        this.setState({
-            search
-        })
     }
 
     getFilteredProducts = () => {
@@ -69,7 +66,6 @@ class App extends Component {
                             value={this.state.value}
                             valueChangeHandler={this.valueChangeHandler}
                             handlerKeyPress={this.handlerKeyPress}
-                            onSearch={this.onSearch}
                         />
                     </Col>
                 </Row>
@@ -116,4 +112,4 @@ const mapDispatchToProps = dispatch => ({
 export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(App);
+)(withRouter(App));
