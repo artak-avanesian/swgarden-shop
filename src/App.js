@@ -7,6 +7,7 @@ import SearchProducts from './SearchProducts/SearchProducts';
 import { connect } from 'react-redux';
 import SearchField from './SearchField/SearchField';
 import Loader from './Loader/Loader'
+import queryString from 'querystring'
 
 class App extends Component {
 
@@ -16,6 +17,15 @@ class App extends Component {
     }
 
     componentDidMount() {
+        const { location } = this.props
+        if (location.search) {
+            this.setState({
+                value: queryString.parse(location.search)['?name']
+            })
+            this.setState(prevState => ({
+                search: prevState.value
+            }))
+        } 
         this.props.fetchData()
     }
 
@@ -70,14 +80,16 @@ class App extends Component {
                         <Menu />
                     </Col>
                     <Col lg={10}>
-                        <Route exact path='/' render={() => <DisplayedProducts
+                        <Route exact path='/' render={props => <DisplayedProducts
                             displayedProducts={products}
+                            routeProps={props}
                         />}/>
                         <Route path='/search' render={() => <SearchProducts
                             searchStr={this.state.search}
                         />}/>
-                        <Route path='/category/:categoryName' render={() => <DisplayedProducts
+                        <Route path='/category/:categoryName' render={props => <DisplayedProducts
                             displayedProducts={displayedProducts}
+                            routeProps={props}
                         />}/>
                     </Col>
                 </Row>
