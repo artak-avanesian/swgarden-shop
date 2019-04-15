@@ -1,5 +1,6 @@
 import React from 'react'
 import { InputGroup, FormControl } from 'react-bootstrap'
+import PropTypes from "prop-types";
 
 const SearchField = ({
     value,
@@ -20,5 +21,11 @@ const SearchField = ({
         />
     </InputGroup>
 )
+
+SearchField.propTypes = {
+    value: PropTypes.string,
+    valueChangeHandler: PropTypes.func,
+    handlerKeyPress: PropTypes.func
+}
 
 export default SearchField

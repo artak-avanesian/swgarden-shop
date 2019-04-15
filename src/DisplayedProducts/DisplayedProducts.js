@@ -1,9 +1,10 @@
 import React from 'react'
 import ProductCard from './../ProductCard/ProductCard';
+import PropTypes from "prop-types";
 import './DisplayedProducts.css'
 
 const DisplayedProducts = ({
-    displayedProducts,
+    displayedProducts
 }) => {
     return (
         <section>
@@ -17,6 +18,10 @@ const DisplayedProducts = ({
         }
     </section>
     )
+}
+
+DisplayedProducts.propTypes = {
+    displayedProducts: PropTypes.array
 }
 
 export default DisplayedProducts

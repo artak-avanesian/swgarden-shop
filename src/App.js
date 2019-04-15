@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Container, Row, Col} from 'react-bootstrap'
-import { Route, withRouter } from 'react-router-dom'
+import { withRouter } from 'react-router-dom'
+import { Switch, Route } from 'react-router'
 import Menu from './Menu/Menu';
 import DisplayedProducts from './DisplayedProducts/DisplayedProducts';
 import SearchProducts from './SearchProducts/SearchProducts';
@@ -8,6 +9,7 @@ import { connect } from 'react-redux';
 import SearchField from './SearchField/SearchField';
 import Loader from './Loader/Loader'
 import queryString from 'querystring'
+import PropTypes from "prop-types";
 
 class App extends Component {
 
@@ -33,9 +35,11 @@ class App extends Component {
         this.setState({
             value: event.target.value
         })
+
         const { history } = this.props
+
         history.push({
-            search: this.state.value.length > 0 ? '?' + new URLSearchParams({ name: event.target.value }) : null
+            search: this.state.value.length > 0 ? '' + new URLSearchParams({ name: event.target.value }) : null
         })
     }
 
@@ -80,23 +84,35 @@ class App extends Component {
                         <Menu />
                     </Col>
                     <Col lg={10}>
-                        <Route exact path='/' render={props => <DisplayedProducts
-                            displayedProducts={products}
-                            routeProps={props}
-                        />}/>
-                        <Route path='/search' render={() => <SearchProducts
-                            searchStr={this.state.search}
-                        />}/>
-                        <Route path='/category/:categoryName' render={props => <DisplayedProducts
-                            displayedProducts={displayedProducts}
-                            routeProps={props}
-                        />}/>
+                        <Switch>
+                            <Route exact path='/' render={props => <DisplayedProducts
+                                displayedProducts={products}
+                                routeProps={props}
+                            />}/>
+                            <Route path='/search' render={() => <SearchProducts
+                                searchStr={this.state.search}
+                            />}/>
+                            <Route path='/category/:categoryName' render={props => <DisplayedProducts
+                                displayedProducts={displayedProducts}
+                                routeProps={props}
+                            />}/>
+                        </Switch>
                     </Col>
                 </Row>
             </Container>
         );
     }
 }
+
+App.propTypes = {
+    products: PropTypes.array,
+    categories: PropTypes.array,
+    loading: PropTypes.bool,
+    displayedProducts: PropTypes.array,
+    getFilteredProducts: PropTypes.func,
+    fetchData: PropTypes.func
+}
+
 
 const mapStateToProps = state => ({
     products: state.products,

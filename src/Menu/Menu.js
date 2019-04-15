@@ -3,6 +3,7 @@ import { Nav } from 'react-bootstrap'
 import { NavLink } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { uniq } from 'lodash'
+import PropTypes from "prop-types";
 import './Menu.css'
 
 const Menu = ({
@@ -30,6 +31,11 @@ const Menu = ({
         }
     </Nav>
 )
+
+Menu.propTypes = {
+    categories: PropTypes.array,
+    changeCategory: PropTypes.func
+}
 
 const mapStateToProps = state => ({
     categories: state.categories

@@ -1,5 +1,6 @@
 import React from 'react'
 import { Card } from 'react-bootstrap'
+import PropTypes from "prop-types";
 import './ProductCard.css'
 
 const ProductCard = ({product}) => (
@@ -17,5 +18,9 @@ const ProductCard = ({product}) => (
         </Card.Body>
     </Card>
 )
+
+ProductCard.propTypes = {
+    product: PropTypes.object
+}
 
 export default ProductCard

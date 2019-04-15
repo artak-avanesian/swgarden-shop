@@ -1,15 +1,17 @@
 import React from 'react'
 import ProductCard from './../ProductCard/ProductCard';
 import { connect } from 'react-redux'
+import PropTypes from "prop-types";
+import './SearchProducts.css'
 
 const SearchProducts = ({
     filteredProducts,
     searchStr,
 }) => (
-    <section>
+    <section className={filteredProducts.length === 0 ? 'results' : null}>
     {
         filteredProducts.length === 0 && searchStr ? 
-        <p>Products with the same name is missing. Please, try again.</p> 
+        <p className='no-results'>No results for <span className='search-word'>{searchStr}</span>. Please, try again.</p>
         : filteredProducts.length > 0 ? filteredProducts.map((item) => (
             <ProductCard
                 key={item.asin}
@@ -20,6 +22,11 @@ const SearchProducts = ({
     }
     </section>
 )
+
+SearchProducts.propTypes = {
+    filteredProducts: PropTypes.array,
+    searchStr: PropTypes.string
+}
 
 const mapStateToProps = state => ({
     filteredProducts: state.filteredProducts
