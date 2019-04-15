@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Container, Row, Col} from 'react-bootstrap'
 import { Route, withRouter } from 'react-router-dom'
 import Menu from './Menu/Menu';
-import { uniq } from 'lodash'
 import DisplayedProducts from './DisplayedProducts/DisplayedProducts';
 import SearchProducts from './SearchProducts/SearchProducts';
 import { connect } from 'react-redux';
@@ -17,10 +16,6 @@ class App extends Component {
     }
 
     componentDidMount() {
-        const { location, history } = this.props
-        if (location.pathname !== '/') {
-            history.push(location.pathname)
-        }
         this.props.fetchData()
     }
 
@@ -48,7 +43,6 @@ class App extends Component {
 
         const {
             products, 
-            categories, 
             loading,
             displayedProducts,
             getFilteredProducts 
@@ -82,13 +76,9 @@ class App extends Component {
                         <Route path='/search' render={() => <SearchProducts
                             searchStr={this.state.search}
                         />}/>
-                        {
-                            uniq(categories).map((item, index) => (
-                                <Route key={index} path={`/${item}`} render={() => <DisplayedProducts
-                                    displayedProducts={displayedProducts}
-                                />}/>
-                            ))
-                        }
+                        <Route path='/category/:categoryName' render={() => <DisplayedProducts
+                            displayedProducts={displayedProducts}
+                        />}/>
                     </Col>
                 </Row>
             </Container>

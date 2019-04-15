@@ -21,7 +21,7 @@ const Menu = ({
                 <NavLink
                     className='nav-link'
                     key={index} 
-                    to={`/${item}`}
+                    to={`/category/${item.split(' ').join('')}`}
                     onClick={() => changeCategory(item)}
                 >
                     {item}
