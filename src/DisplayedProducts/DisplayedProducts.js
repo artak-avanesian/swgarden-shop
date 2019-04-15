@@ -4,8 +4,9 @@ import './DisplayedProducts.css'
 
 const DisplayedProducts = ({
     displayedProducts,
-}) => (
-    <section>
+}) => {
+    return (
+        <section>
         {
             displayedProducts.map((item) => (
                 <ProductCard
@@ -15,5 +16,7 @@ const DisplayedProducts = ({
             ))
         }
     </section>
-)
+    )
+}
+
 export default DisplayedProducts

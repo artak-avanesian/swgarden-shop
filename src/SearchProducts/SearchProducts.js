@@ -1,6 +1,6 @@
 import React from 'react'
 import ProductCard from './../ProductCard/ProductCard';
-
+import { connect } from 'react-redux'
 
 const SearchProducts = ({
     filteredProducts,
@@ -21,4 +21,10 @@ const SearchProducts = ({
     </section>
 )
 
-export default SearchProducts
+const mapStateToProps = state => ({
+    filteredProducts: state.filteredProducts
+})
+
+export default connect(
+    mapStateToProps
+)(SearchProducts)

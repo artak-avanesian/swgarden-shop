@@ -7,16 +7,20 @@ import DisplayedProducts from './DisplayedProducts/DisplayedProducts';
 import SearchProducts from './SearchProducts/SearchProducts';
 import { connect } from 'react-redux';
 import SearchField from './SearchField/SearchField';
+import Loader from './Loader/Loader'
 
 class App extends Component {
 
     state = {
         value: '',
         search: '',
-        displayedProducts: [],
     }
 
     componentDidMount() {
+        const { location, history } = this.props
+        if (location.pathname !== '/') {
+            history.push(location.pathname)
+        }
         this.props.fetchData()
     }
 
@@ -26,7 +30,7 @@ class App extends Component {
         })
         const { history } = this.props
         history.push({
-            search: this.state.value.length > 0 ? '' + new URLSearchParams({ value: event.target.value }) : null
+            search: this.state.value.length > 0 ? '?' + new URLSearchParams({ name: event.target.value }) : null
         })
     }
 
@@ -40,27 +44,21 @@ class App extends Component {
         }
     }
 
-    getFilteredProducts = () => {
-
-        const {search} = this.state
-
-        if (!search) return []
-
-        return this.props.products.filter((item) => {
-            return item.name.toLowerCase().includes(search.toLowerCase())
-        })
-    }
-
-    changeCategory = (category) => {
-        this.setState({
-            displayedProducts: this.props.products.filter(item => item.bsr_category === category)
-        })
-    } 
-
     render() {
 
-        const filteredProducts = this.getFilteredProducts()
-        const { products, categories } = this.props
+        const {
+            products, 
+            categories, 
+            loading,
+            displayedProducts,
+            getFilteredProducts 
+        } = this.props
+
+        getFilteredProducts(this.state.search)
+
+        if (loading) {
+            return <Loader/>
+        }
 
         return (
             <Container>
@@ -75,23 +73,19 @@ class App extends Component {
                 </Row>
                 <Row>
                     <Col lg={2}>
-                        <Menu
-                            categories={uniq(categories)}
-                            changeCategory={this.changeCategory}
-                        />
+                        <Menu />
                     </Col>
                     <Col lg={10}>
                         <Route exact path='/' render={() => <DisplayedProducts
                             displayedProducts={products}
                         />}/>
                         <Route path='/search' render={() => <SearchProducts
-                            filteredProducts={filteredProducts}
                             searchStr={this.state.search}
                         />}/>
                         {
                             uniq(categories).map((item, index) => (
                                 <Route key={index} path={`/${item}`} render={() => <DisplayedProducts
-                                    displayedProducts={this.state.displayedProducts}
+                                    displayedProducts={displayedProducts}
                                 />}/>
                             ))
                         }
@@ -104,12 +98,18 @@ class App extends Component {
 
 const mapStateToProps = state => ({
     products: state.products,
-    categories: state.categories
+    categories: state.categories,
+    loading: state.loading,
+    displayedProducts: state.displayedProducts
 })
 
 const mapDispatchToProps = dispatch => ({
     fetchData: () => dispatch({
         type: 'FETCH_DATA'
+    }),
+    getFilteredProducts: search => dispatch({
+        type: "GET_FILTERED_PRODUCTS",
+        search
     })
 })
 
