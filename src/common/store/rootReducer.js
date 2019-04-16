@@ -2,7 +2,6 @@ const initialState = {
     products: [],
     categories: [],
     loading: false,
-    displayedProducts: [],
     filteredProducts: []
 }
 
@@ -24,16 +23,11 @@ const rootReducer = (state = initialState, action) => {
                 ...state,
                 categories: action.data.products.map(item => item.bsr_category)
             }
-        case "CHANGE_CATEGORY":
-            return {
-                ...state,
-                displayedProducts: state.products.filter(item => item.bsr_category === action.category)
-            }
-        case "GET_FILTERED_PRODUCTS":
+        case "GET_FILTERED_PRODUCTS_BY_SEARCH_WORD":
             return {
                 ...state,
                 filteredProducts: state.products.filter(item => {
-                    return item.name.toLowerCase().includes(action.search.toLowerCase())
+                    return item.name.toLowerCase().includes(action.searchWord.toLowerCase())
                 })
             }
         default:

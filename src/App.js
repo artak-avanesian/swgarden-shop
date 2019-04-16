@@ -24,12 +24,11 @@ class App extends Component {
             this.setState({
                 value: queryString.parse(location.search)['?name']
             })
-            this.setState(prevState => ({
-                search: prevState.value
-            }))
+            this.setSearch()
         } 
         this.props.fetchData()
     }
+
 
     valueChangeHandler = event => {
         this.setState({
@@ -39,16 +38,20 @@ class App extends Component {
         const { history } = this.props
 
         history.push({
-            search: this.state.value.length > 0 ? '' + new URLSearchParams({ name: event.target.value }) : null
+            search: this.state.value.length > -1 ? '' + new URLSearchParams({ name: event.target.value }) : null
         })
     }
 
+    setSearch = () => {
+        this.setState(prevState => ({
+            search: prevState.value
+        }))
+    } 
+
     handlerKeyPress = event => {
-        const {location} = this.props
+        const { location } = this.props
         if (event.key === 'Enter' && this.state.value) {
-            this.setState(prevState => ({
-                search: prevState.value
-            }))
+            this.setSearch()
             location.pathname = '/search'
         }
     }
@@ -56,9 +59,7 @@ class App extends Component {
     render() {
 
         const {
-            products, 
             loading,
-            displayedProducts,
             getFilteredProducts 
         } = this.props
 
@@ -85,17 +86,11 @@ class App extends Component {
                     </Col>
                     <Col lg={10}>
                         <Switch>
-                            <Route exact path='/' render={props => <DisplayedProducts
-                                displayedProducts={products}
-                                routeProps={props}
-                            />}/>
+                            <Route exact path='/' component={DisplayedProducts}/>
                             <Route path='/search' render={() => <SearchProducts
                                 searchStr={this.state.search}
                             />}/>
-                            <Route path='/category/:categoryName' render={props => <DisplayedProducts
-                                displayedProducts={displayedProducts}
-                                routeProps={props}
-                            />}/>
+                            <Route path='/category/:categoryName' component={DisplayedProducts}/>
                         </Switch>
                     </Col>
                 </Row>
@@ -105,29 +100,25 @@ class App extends Component {
 }
 
 App.propTypes = {
-    products: PropTypes.array,
     categories: PropTypes.array,
     loading: PropTypes.bool,
-    displayedProducts: PropTypes.array,
     getFilteredProducts: PropTypes.func,
     fetchData: PropTypes.func
 }
 
 
 const mapStateToProps = state => ({
-    products: state.products,
     categories: state.categories,
     loading: state.loading,
-    displayedProducts: state.displayedProducts
 })
 
 const mapDispatchToProps = dispatch => ({
     fetchData: () => dispatch({
         type: 'FETCH_DATA'
     }),
-    getFilteredProducts: search => dispatch({
-        type: "GET_FILTERED_PRODUCTS",
-        search
+    getFilteredProducts: searchWord => dispatch({
+        type: "GET_FILTERED_PRODUCTS_BY_SEARCH_WORD",
+        searchWord
     })
 })
 

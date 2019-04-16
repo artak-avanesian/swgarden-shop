@@ -7,8 +7,7 @@ import PropTypes from "prop-types";
 import './Menu.css'
 
 const Menu = ({
-    categories,
-    changeCategory,
+    categories
 }) => (
     <Nav defaultActiveKey="/" className="flex-column">
         <NavLink 
@@ -23,7 +22,6 @@ const Menu = ({
                     className='nav-link'
                     key={index} 
                     to={`/category/${item.split(' ').join('')}`}
-                    onClick={() => changeCategory(item)}
                 >
                     {item}
                 </NavLink>
@@ -33,22 +31,14 @@ const Menu = ({
 )
 
 Menu.propTypes = {
-    categories: PropTypes.array,
-    changeCategory: PropTypes.func
+    categories: PropTypes.array
 }
 
 const mapStateToProps = state => ({
     categories: state.categories
 })
 
-const mapDispatchToProps = dispatch => ({
-    changeCategory: category => dispatch({
-        type: 'CHANGE_CATEGORY',
-        category
-    })
-})
 
 export default connect(
-    mapStateToProps,
-    mapDispatchToProps
+    mapStateToProps
 )(Menu)
