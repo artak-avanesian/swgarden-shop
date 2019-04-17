@@ -42,6 +42,10 @@ class App extends Component {
         })
     }
 
+    routeToSearch = location => {
+        location.pathname = '/search'
+    }
+
     setSearch = () => {
         this.setState(prevState => ({
             search: prevState.value
@@ -77,6 +81,7 @@ class App extends Component {
                             value={this.state.value}
                             valueChangeHandler={this.valueChangeHandler}
                             handlerKeyPress={this.handlerKeyPress}
+                            routeToSearch={this.routeToSearch}
                         />
                     </Col>
                 </Row>

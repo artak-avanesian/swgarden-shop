@@ -1,11 +1,14 @@
 import React from 'react'
 import { InputGroup, FormControl } from 'react-bootstrap'
+import { withRouter } from 'react-router-dom'
 import PropTypes from "prop-types";
 
 const SearchField = ({
     value,
     valueChangeHandler,
-    handlerKeyPress
+    handlerKeyPress,
+    routeToSearch,
+    location
 }) => (
     <InputGroup className="mb-3 mt-4">
         <InputGroup.Prepend>
@@ -18,6 +21,7 @@ const SearchField = ({
             value={value}
             onChange={valueChangeHandler}
             onKeyPress={handlerKeyPress}
+            onFocus={() => routeToSearch(location)}
         />
     </InputGroup>
 )
@@ -28,4 +32,4 @@ SearchField.propTypes = {
     handlerKeyPress: PropTypes.func
 }
 
-export default SearchField
+export default withRouter(SearchField)
