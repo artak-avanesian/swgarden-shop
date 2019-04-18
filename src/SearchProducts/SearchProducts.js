@@ -1,12 +1,12 @@
 import React from 'react'
-import ProductCard from './../ProductCard/ProductCard';
 import { connect } from 'react-redux'
 import PropTypes from "prop-types";
+import ProductCard from './../ProductCard/ProductCard';
 import './SearchProducts.css'
 
 const SearchProducts = ({
     filteredProducts,
-    searchStr,
+    searchStr
 }) => (
     <section className={filteredProducts.length === 0 ? 'results' : null}>
     {

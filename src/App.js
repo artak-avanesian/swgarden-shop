@@ -2,14 +2,14 @@ import React, { Component } from 'react';
 import { Container, Row, Col} from 'react-bootstrap'
 import { withRouter } from 'react-router-dom'
 import { Switch, Route } from 'react-router'
+import queryString from 'querystring'
+import PropTypes from "prop-types";
+import { connect } from 'react-redux';
+import SearchField from './SearchField/SearchField';
+import Loader from './Loader/Loader';
 import Menu from './Menu/Menu';
 import DisplayedProducts from './DisplayedProducts/DisplayedProducts';
 import SearchProducts from './SearchProducts/SearchProducts';
-import { connect } from 'react-redux';
-import SearchField from './SearchField/SearchField';
-import Loader from './Loader/Loader'
-import queryString from 'querystring'
-import PropTypes from "prop-types";
 
 class App extends Component {
 
@@ -40,10 +40,6 @@ class App extends Component {
         history.push({
             search: this.state.value.length > -1 ? '' + new URLSearchParams({ name: event.target.value }) : null
         })
-    }
-
-    routeToSearch = location => {
-        location.pathname = '/search'
     }
 
     setSearch = () => {
@@ -81,7 +77,6 @@ class App extends Component {
                             value={this.state.value}
                             valueChangeHandler={this.valueChangeHandler}
                             handlerKeyPress={this.handlerKeyPress}
-                            routeToSearch={this.routeToSearch}
                         />
                     </Col>
                 </Row>

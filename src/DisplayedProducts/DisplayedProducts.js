@@ -1,11 +1,11 @@
 import React from 'react'
-import ProductCard from './../ProductCard/ProductCard';
 import PropTypes from "prop-types";
 import { withRouter } from 'react-router-dom'
 import queryString from 'querystring'
 import { connect } from 'react-redux'
-import './DisplayedProducts.css'
+import ProductCard from './../ProductCard/ProductCard';
 import SearchProducts from '../SearchProducts/SearchProducts';
+import './DisplayedProducts.css'
 
 const DisplayedProducts = ({
     products,
@@ -16,7 +16,7 @@ const DisplayedProducts = ({
     
     const displayedProducts = location.pathname === '/' ? products 
     : products.filter(item => item.bsr_category.split(' ').join('') === category)
-    
+
     if (location.search && history.action === 'POP') {
         return (
             <SearchProducts
